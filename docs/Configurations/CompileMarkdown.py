@@ -9,6 +9,7 @@ import glob
 import os
 import pdb
 import re
+import string
 
 class Lecture:
     def __init__(self, pdf_path, txt_path):
@@ -18,7 +19,7 @@ class Lecture:
 
     def add(self, config, args):
         if config is not None:
-            self.exercises[config] = args
+            self.exercises[config] = "%s" % args
 
     def __repr__(self):
         s = []
@@ -37,12 +38,11 @@ def parse_cmdline(cmd):
     parts = {}
     s = std_cmd_pat
     m = s.match(cmd)
-    #pdb.set_trace()
+    (config, args) = (None, None)
     if m: 
-        #print(m.groups())
-        return m.groups()
-    else:
-        return (None,None)
+        (config, args) = [p.strip() for p in m.groups()] 
+        if args == "-m" : args += " StateMachine:START" 
+    return (config, args)
 
 def analyse_lecture(pdf_path, txt_path):
     lecture = Lecture(pdf_path, txt_path)
