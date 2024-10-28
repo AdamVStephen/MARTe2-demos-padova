@@ -1,0 +1,195 @@
+MARTe2 Users Meeting
+EPICSv3 + EPICSv4 = EPICSv7
+Andre Neto
+May, 2019
+
+1
+
+Objective
+• Integration with EPICSv3
+• Monitoring
+• Commands (i.e. Messages)
+• Non RT input data source*
+• Integration with EPICSv7
+• Structures
+• Monitoring
+• Non RT input data source*
+• Commands (RPC)*
+
+*Available as standard components but not demonstrated in this demo
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+2
+
+Example 1 – EPICSv3 commands
+• EPICSCAInterface sends/receives messages to/from StateMachine
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+3
+
+Example 1 – RT Components
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+4
+
+Example 1 – RT Components
+Depending
+on the state,
+store data in
+a file
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+5
+
+Example1 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/Configurations
+softIoc -d EPICSv3-demo.db
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-EPICSv3-1.cfg -m
+StateMachine:START
+
+• Console #3
+caput
+caget
+caput
+caget
+caput
+
+MARTE2-DEMO-APP:COMMAND 0
+MARTE2-DEMO-APP:STATUS
+MARTE2-DEMO-APP:COMMAND 1 && sleep 2
+MARTE2-DEMO-APP:STATUS && sleep 5
+MARTE2-DEMO-APP:COMMAND 0
+
+#Open the file /tmp/RTApp-EPICSv3-1.csv and remove the last line
+Octave
+>graphics_toolkit('gnuplot');
+>load('/tmp/RTApp-EPICSv3-1.csv');
+>plot(RTApp_EPICSv3_1(:,1), RTApp_EPICSv3_1(:,2), RTApp_EPICSv3_1(:,1), RTApp_EPICSv3_1(:,6))
+>legend('Reference0', 'Measurement0')
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+6
+
+Example1 – Learn more
+• View the configuration file
+• Check what are signals are stored in the file
+• Plot the error0 and the control0 signals
+• Some performance figures are also stored in a different
+CSV
+• Try to plot them
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+7
+
+Example 2 – EPICSv3 monitoring
+Objectives
+• Monitor some outputs of the system using EPICSv3
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+8
+
+Example 2 – RT Components
+•
+•
+
+Depending on the state, store data in a file
+Always monitoring
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+9
+
+Example2 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/Configurations
+softIoc -d EPICSv3-demo.db
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-EPICSv3-2.cfg -m
+StateMachine:START
+
+• Console #3
+camonitor MARTE2-DEMO-APP:HIST-IDLE-CT
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+10
+
+Example2 – Learn more
+• Export as an EPICS variable also the Measurement0
+(MARTE2-DEMO-APP:MEASUREMENT0)
+• Use an EPICSCAInput and an EPICSCAOutput to connect
+a control output to a measurement input
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+11
+
+Example 3 – EPICSv7 monitoring
+Objectives
+• Monitor the outputs of the system using EPICSv7
+• Note how information can be better organized with structured types
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+12
+
+Example 3 – RT Components
+•
+
+Note in the configuration file that the types are now structured
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+13
+
+Example3 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/Configurations
+softIoc -d EPICSv3-demo.db
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-EPICSv7-1.cfg -m
+StateMachine:START
+
+• Console #3
+caput MARTE2-DEMO-APP:COMMAND 1
+pvmonitor MARTe2-Demo-App:Statistics
+pvmonitor MARTe2-Demo-App:Signals
+caput MARTE2-DEMO-APP:COMMAND 0
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+14
+
+Example3 – Learn more
+• Export the State variables in the EPICSv7 structures
+• Create a configuration file that allows to proxy from/to
+EPICSv3 to/from EPICSv7
+• Note the EPICSv3 db file must be update with any new
+variables that might be required
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+15
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

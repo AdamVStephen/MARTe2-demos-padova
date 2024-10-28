@@ -1,0 +1,509 @@
+MARTe2 Users Meeting
+Quality Assurance & collaboration models with-in
+the community
+A. Neto, F. Sartori
+May 2019
+
+1
+
+Why a new MARTe project?
+
+
+Fast controller prototyope project
+
+
+Integration of fast plant systems in
+ITER
+
+
+
+Development of ITER specific
+integration components
+
+
+
+Imposes the implementation of a Quality
+Assurance (QA) strategy that is
+appropriate for ITER
+
+Safely integrate
+contributions from a
+large and heterogeneous
+development community
+
+Development and upgrading of framework
+components will be distributed to different teams
+F4E internal
+resources
+
+IO resources
+
+Academic
+institutions
+
+Industrial
+suppliers
+
+Guarantee consistency of
+Implementation of
+coding and application
+of coding standards
+
+Documentation
+
+Testing standards
+
+Manage changes to the
+configuration items and
+baselines
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+2
+
+V&V
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+3
+
+Agile life-cycle method
+
+
+Requirements
+
+
+
+
+User-stories
+
+
+
+
+
+
+
+Architecture
+Implementation
+Unit-testing
+Integrated testing
+
+Golden (and expensive!!!) rule
+
+
+
+
+Translated into user-stories
+
+The Q&A review for each of the activities shall be done by a different
+person
+ …but this person can be a developer in another story
+ …or can be the coder for the implementation and the reviewer for the
+testing
+
+Every scrum…
+
+
+
+…ends with a new release and with a QA audit
+and with a sprint review for lessons learned regarding the QA process
+(very important!)
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+4
+
+Issue tracking
+
+
+Redmine to implement Agile development
+
+
+
+Full tracking which facilitates Auditing
+Every story has the same structure:
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+5
+
+Issue tracking
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+6
+
+Issue tracking
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+7
+
+Agile board
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+8
+
+Q&A Audit
+
+
+Every scrum ends with a new release and with a QA audit
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+9
+
+Q&A Audit
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+10
+
+Q&A Audit
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+11
+
+Q&A Audit
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+12
+
+Tools and methods
+
+
+Source control version
+
+
+Git and GitLab
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+13
+
+Coding standard
+
+
+C++ version
+
+
+
+
+
+
+
+ISO/IEC 14882:2003 aka as C++03
+
+MISRA C++:2008
+ Guidelines for the C++ language targeted towards
+critical systems
+ Applies to the C++ language defined by the
+standard ISO/IEC 14882:2003
+ Emerged from the automotive industry, and is
+widely accepted as a model for best practices in
+sectors like aerospace, telecom, medical devices,
+defense, railway and others
+ Part of the C++ stdlib cannot be used (e.g. cstring)
+Strict documentation standard defined
+Strict coding style standard defined
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+14
+
+Static checking tools (FlexeLint)
+
+
+Devil is in the details
+
+
+
+
+
+Adjusting the configuration of the linting files requires time and expertise...
+Without integrating it in the code development environment, it can make life a
+living hell to the developers.
+
+It is not cheap
+
+
+The level of pedanticity is huge
+
+
+
+
+
+
+This definition has 5 “mistakes”: unsigned int a = 3;
+
+But gives reviewers a lot of confidence that a lot of common
+mistakes were handled
+
+Justify in the code
+
+
+One of the major advantages is
+that the deviations to the
+standard can be put in the code
+itself
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+15
+
+Testing, testing and testing…
+
+
+
+
+
+Unit testing aiming at 100 % coverage
+Google test used as framework
+ But no explicit dependency on the framework
+Coverage with lcov frontend to gcov
+ Again, getting the configuration of this right is
+not trivial…
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+16
+
+Development environment
+
+
+Eclipse is configured to guarantee
+ Code compilation
+ Correct formatting against coding style
+ Automatically generate the documentation with
+doxygen
+ Manage the git branches
+ Integrated with flexelint to highlight problems
+ Run the tests
+ Check for the coverage
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+17
+
+Integration environment
+
+
+Jenkins runs everyday against the development branch
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+18
+
+Where are we now?
+
+
+QA integration system successfully running for almost 4 years
+
+
+
+19 development releases
+
+
+
+Very high MISRA compliance (almost 100 %)
+
+
+
+> 3400 core unit-tests
+
+
+
+> 1500 components unit-tests
+
+
+
+High Coverage
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+19
+
+Lessons learned
+
+
+
+
+Finding the right balance between
+creativity and Q&A is an art
+ Modifications can be adapted but
+one must be extremely
+conservative
+ This is also true for compiler
+versions, new versions of the
+standard language
+ Every modification to the way of
+working requires significant energy
+ Infrastructure
+ Software
+ People’s time
+Once a Q&A strategy and development
+environment is agreed stick with it
+ Be prepared to handle frustration
+ Linting and documentation are
+hard tasks which take time for
+people to get used to
+ Automate as much as possible
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+20
+
+Lessons learned
+
+
+Linting forces people to think
+and guarantees some
+uniformity in addressing
+problems
+ But it is not a silver bullet!
+ It is not easy to configure
+ Some errors are extremely
+pedantic and developers
+need time to get used to it
+ Might introduce actually
+introduce bugs (when
+trying to solve linting
+issues)
+ Test!
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+21
+
+Lessons learned
+
+
+Agile is a great tool
+ Makes sure that people talk everyday
+ People can share ideas and address
+immediate problems
+ Technical authority to take decisions is
+crucial
+ We have it mixed with some waterfall which
+can lead to dead-locks in the development
+(e.g. all the stories are waiting to be reviewed
+and only one Q&A reviewer is available)
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+22
+
+Lessons learned
+
+
+Eclipse
+ Having all the Q&A process embedded in the
+tool is very beneficial
+ In particular having the IDE integrated with lint
+is very important
+ Otherwise you might be dealing with linting
+reports that have tens or hundreds of
+warnings and then having to look for the line
+numbers in the files
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+23
+
+Lessons learned
+
+
+Unit testing
+ Try to aim at 100 % coverage and try to have
+as many tests as possible
+ We have decided not to apply the coding
+standard to tests
+ Simply could not allow the effort
+ Unit testing the classes that handle the
+operating system abstraction was not easy
+ Main fault conditions are hard to simulate
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+24
+
+Lessons learned
+
+
+Q&A
+ Having each user-story water-falled allows to easily
+develop the sprint audit
+ Aligning sprint with releases is very helpful
+ Allows to have all the Q&A reports with the same
+release numbers and to have everything consistent
+ Allow developers to vent their frustration
+ Usually there is the opportunity to make small
+improvements in the processes …
+ … but do not allow for clumsiness
+ Documentation is a (very difficult) art
+ Make sure this is reviewed several times during the
+development
+ Make sure that the framework documentation (API and
+code) is aligned to the actual code
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+25
+
+And the numbers are…
+Item
+
+Lines of code
+
+Core
+
+47 k
+
+Core (test)
+
+138 k
+
+Official components
+
+28 k
+
+Official components (test)
+
+122 k
+
+
+
+For every unit of development expect:
+
+
+
+
+
+~4.5x of QA
+~0.3x of QA review
+
+For every new release expect:
+
+
+1 day of QA
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+26
+
+Collaboration models
+
+
+Open discussion and feedback from audience
+
+MARTe2 Users Meeting - Quality Assurance & collaboration models with-in the community
+
+27
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

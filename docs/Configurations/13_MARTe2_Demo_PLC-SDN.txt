@@ -1,0 +1,99 @@
+MARTe2 Users Meeting
+PLC-SDN Demo
+Andre Neto, Katarina Cindric
+May, 2019
+
+1
+
+Objective
+• Demonstrate real-time interface between MARTe2 and
+PLC
+• Using SDN
+• Configuration file:
+• https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demospadova/blob/develop/Configurations/RTApp-PLC-SDN-2.cfg
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+2
+
+PLC interface
+MDS+
+Data-Source
+
+EPICS
+Data-source
+
+OPC-UA
+Data-source
+
+Error
+
+SDN
+Data-Source
+
+REST
+(json-http)
+
+SDN
+Data-Source
+
+Integral
+
+Ref
+
+State Space
+GAM
+Control
+
+Wavegen
+GAM
+PXI
+ADC
+C-RIO
+ADC
+
+Meas
+
+1Mhz->2kHz
+MDS+
+Data-Source
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+UDP
+STM32
+UDP
+Point2Point
+UDP
+PWM
+Point2Point
+UDP
+Data-Source
+STM32
+Point2Point
+Data-Source
+Point2Point
+PWM
+Data-Source
+Data-Source
+PXI
+DAC
+C-RIO
+DAC
+
+3
+
+Configuration files
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+4
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

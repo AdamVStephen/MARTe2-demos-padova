@@ -1,0 +1,49 @@
+MARTe2 Users Meeting
+SDN Interface
+Andre Neto
+May, 2019
+
+1
+
+Objective
+• Integration with SDN
+• Subscriber
+• Publisher
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+2
+
+Example 1 – SDN Publisher/Receiver
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+3
+
+Example1 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-SDN-1-Publisher.cfg -m
+StateMachine:START
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-SDN-1-Subscriber.cfg -m
+StateMachine:START
+
+• Console #3
+pvmonitor MARTe2-Demo-App:Statistics
+pvmonitor MARTe2-Demo-App:Signals
+
+MARTe2 Users Meeting - EPICSv3 + EPICSv4 = EPICSv7
+
+4
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

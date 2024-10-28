@@ -1,0 +1,466 @@
+MARTe2 Users Meeting
+
+History, objectives and overview of the framework
+Andre’ Neto, Filippo Sartori, G. De Tommasi*
+May, 2019
+*Many slides from the presentation a Brief history of the MARTe framework (2013)
+
+1
+
+Tokamak continuous development
+
+Tokamak are experimental machines:
+• the process is the experiment!
+Tokamak development is part of the experiment.
+The development stops when the machine is
+closed.
+This meant a continuous development of control
+systems at all levels: functions, performance,
+reliability.
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+2
+
+Reliability vs complexity
+
+Controlling a Tokamak means managing 100s MW
+of power with associated risks of 100s M€ of
+investment.
+To measure control relevant Tokamak quantities
+one needs to combine 100s of sensors using
+complex non-linear iterative algorithms.
+Failure of sensors is common, algorithms nonconvergence is likely too.
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+3
+
+Lack of resources
+
+Tokamak control suffers from lack of resources:
+Lack of commissioning time: Squeezed between
+delay of hardware deliveries and rigidness of start
+of experimental campaigns.
+Low financing: Tokamak hardware is expensive
+and typically absorbs more resources than
+forecast
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+4
+
+PPCC Control systems in the mid 90s
+PPCC: Plasma Position and Current Control – plasma magnetic control
+• Two of the main systems run at JET by the Plasma Operations Group:
+• Shape Controller (SC) C code deployed on a VxWorks/VME/Motorola68k
+platform (still is!)
+• Vertical Stabilization System (VS) C code deployed on 4 Texas Instruments
+DSPs
+
+Main issues
+• The code was tailored at the specific platform
+• Lack of modularity
+• Different software solutions to interface with the JET software infrastructure
+(pre-pulse system configuration, post-pulse data collection,. . .)
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+5
+
+A new framework for RT applications
+2001/2002 Opportunity for an upgrade
+• Revamping of the SC was planned in order to add the eXtreme Shape Controller
+algorithm (XSC)
+• Within the Plasma Operations Group, decision to move to a common framework for
+the development of real-time applications
+• With-in the organization new (and competing) integration solutions (frameworks)
+start to flourish
+
+Aims (User Requirements)
+• Standardize the development of real-time applications (style, language, …)
+• Increase the code reusability
+• Separate (as much as possible) the user application from the software required to
+interface with the plant infrastructure
+• Reduce the time needed for commissioning
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+6
+
+A new framework for RT applications –
+High level requirements
+High Level System Requirements
+• Portable (multi-OS and multi-platform)
+• Modular – the user application would have been easily plugged into an executor of
+real-time application
+• Written in C++ (object oriented approach) – for embedded (2001!)
+• Allow scientists (process experts) to abstract from the plant interfaces
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+7
+
+JETRT
+• JETRT framework developed in 2002/2003 to deploy the XSC
+• Based on the cross-platform BaseLib library (developed within the POG group)
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+8
+
+Use Application plug-in
+
+Use Application plug-in
+• The user supplied code
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+9
+
+Use Application plug-in
+
+Use Application plug-in
+• The user supplied code
+• Perform offline validation against a
+plant model
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+10
+
+Use Application plug-in
+
+Use Application plug-in
+• The user supplied code
+• Perform offline validation against a plant
+model
+• Perform real-time validation with
+hardware-in-the-loop
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+11
+
+Use Application plug-in
+
+Use Application plug-in
+• The user supplied code
+• Perform offline validation against a plant
+model
+• Perform real-time validation with
+hardware-in-the-loop
+• Run the real-time system on the plant
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+12
+
+XSC
+XSC + JETRT
+• New SC (including the XSC) was deployed on a 400 MHz G4 PowerPC running
+VxWorks
+• 2 ms control loop (but it can run at 1 ms)
+• Portability enabled
+• Exhaustive debug of both the JETRT framework and the XSC offline, on a Windows
+platform
+• Testing in the lab, with a mockup of the JET timing system and of the I/O
+• Only 3 days of testing on the plant were needed for the commissioning of the new
+system
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+13
+
+MARTe1 – the origins
+Fall 2004/Winter 2005
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+14
+
+MARTe1 – the limitations of JETRT
+Limitations of JETRT
+• No real separation between the user application and the plant-interface software
+• Some soft-dependencies on JET libraries and JET operational philosophy
+• In 2011, about 1 ppm was needed to include the Current Limit Avoidance system in
+SC!
+• Lack of confidence driven by difficulties on testing and porting to newer platforms
+and machines
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+15
+
+MARTe1 – a new framework was born
+Aims (User Requirements)
+• Clear boundary between algorithms, hardware and with the operational
+environments (portability)
+• Run exactly the same application as in the RTOS
+
+•
+•
+•
+•
+
+Data driven
+Instropection
+Without sacrificing RT
+Promote simulink-like way of describing the problem
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+16
+
+BaseLib2 – the multiplatform support
+library
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+17
+
+Modularity (GAMs)
+GAM: Generic Application Module
+Define boundaries
+• Algorithms and hardware don't mix!
+• Modules do only what they advertise
+• No interdependence or a priori knowledge
+Generic by design
+• Same goals, same module
+• Reusability and maintainability
+Simulation
+• Replace actuators and plants with models
+• Keep all the other modules untouched
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+18
+
+Common GAMs!
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+19
+
+Sharing data between GAMs
+DDB: Dynamic Data Buffer
+• GAMs share data through a memory bus
+• MARTe guarantees coherency between
+requested and produced signals
+• Set of GAMs allow to stream data to
+different MARTe systems
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+20
+
+Executing GAMs
+RealTimeThread
+• Sequentially executes GAMs
+• Works as micro-scheduler
+• Can be allocated to specific CPUs
+• Keeps accurate information about execution times
+• Requires an external time and triggering mechanism
+• Multiple RTThreads can run in parallel
+• Synchronisation
+• Synchronous to hardware
+• Asynchronous
+• Get latest available value
+• Verify acceptable latency (sample too late?)
+• ADC, network, time card, another loop, ...
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+21
+
+Interfacing with MARTe
+MARTe1 was already interface agnostic
+• No predefined GUI
+• No predefined high level protocols
+• Allowed to easily deploy in many different
+environments and machines
+• Translation components implement interface
+between site specific environment and MARTe
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+22
+
+VS5: a case study
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+23
+
+VS5: a case study
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+24
+
+VS5: a case study
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+25
+
+VS5: a case study
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+26
+
+VS5: a case study
+
+2008 – VS5 deployed
+Modular
+Data driven
+Introspection
+Reliable
+Performance
+
+VS Achieved:
+50 ± 0.10 μs
+(max jitter of 0.80 μs)
+
+Low jitter
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+27
+
+MARTe1: what is it being used for?
+
+
+Real-time control of tokamak systems
+
+
+Many required to the operate the machine
+
+JET
+
+COMPASS
+
+• Vertical Stability
+• Real-time Protection Sequencer
+• Vessel Thermal map
+• Walls
+• Equinox
+• Beta-Li
+• As part of post-processing codes
+• Shape control
+• Vertical Stability
+
+ISTTOK
+
+• Integrated plasma control
+
+FTU
+
+• Integrated plasma control
+• Additional heating control
+
+RFX
+
+• Performance studies of the framework
+
+KSTAR
+
+• *Density control
+
+ITER
+
+• ECRH**
+• Diagnostics**
+
+F4E
+
+• Falcon test facility**
+• IFMIF**
+
+*Evaluation only
+**MARTe2
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+28
+
+Why a new MARTe project?
+
+
+Fast controller prototyope project
+
+
+Integration of fast plant systems in
+ITER
+
+
+
+Development of ITER specific
+integration components
+
+
+
+Imposes the implementation of a Quality
+Assurance (QA) strategy that is
+appropriate for ITER
+
+Safely integrate
+contributions from a
+large and heterogeneous
+development community
+
+Development and upgrading of framework
+components will be distributed to different teams
+F4E internal
+resources
+
+IO resources
+
+Academic
+institutions
+
+Industrial
+suppliers
+
+Guarantee consistency of
+Implementation of
+coding and application
+of coding standards
+
+Documentation
+
+Testing standards
+
+Manage changes to the
+configuration items and
+baselines
+
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+29
+
+MARTe What and Why
+
+Tokamak Control System
+• Rapid development
+• Low budget
+• High reliability
+• High complexity
+MARTe has been developed in this environment and
+offers:
+• Modularity & Configurability
+ rapid dev
+ low budget
+• Recycle & Standardize
+ reliability
+• Modularity & Code Integration  complexity
+MARTe2 Users Meeting - History, objectives and overview of the framework
+
+30
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

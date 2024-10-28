@@ -1,0 +1,175 @@
+MARTe2 Users Meeting
+Interfacing with MARTe2: OPC UA
+Luca Porzio
+May, 2019
+
+1
+
+OPC Unified Architecture
+OPC Unified Architecture is a platform independent
+service-oriented architecture for communication and
+information modelling in industrial automation.
+
+•
+•
+•
+•
+
+Open International Standard IEC 62541
+Vertical Communication
+Robust security
+Comprehensive Information model
+
+Interfacing with MARTe2: OPC UA
+
+2
+
+OPC UA – Why?
+Using OPC UA
+•
+•
+•
+•
+•
+
+Freely available and implementable under GPL 2.0 license
+Cross platform
+Service Oriented: OPC UA comprises a set of 37 standard services
+Inherent complexity: the specification consists of 1250 pages in 14 documents
+There are over 35 collaborations with the OPC Foundation
+
+Communication model
+•
+•
+
+Client – Server or Publish – Subscribe model
+Binary TCP or Web Service
+
+Interfacing with MARTe2: OPC UA
+
+3
+
+OPC UA – Information modelling
+Integral Information model
+•
+•
+
+Network based on nodes.
+Nodes can include any kind of meta information, and are similar to the objects in
+Object-oriented programming.
+• Nodes can have attributes for data access, methods that can be called and
+triggered events.
+
+Interfacing with MARTe2: OPC UA
+
+4
+
+OPC UA – Address Space
+Database of variables
+•
+
+The set of objects and related information that the OPC UA server makes available
+to clients is its address space.
+
+Interfacing with MARTe2: OPC UA
+
+5
+
+MARTe2 – OPC UA: Library
+Open62541: open source C implementation of OPC UA.
+•
+•
+•
+•
+
+Open source license (Mozilla Public License v2.0)
+Runs on Windows, Linux, QNX, Android and diverse embedded systems
+Written in C99 with architecture-specific plugins (POSIX, ...)
+Well supported: companies, universities, agencies
+
+https://open62541.org/
+
+Interfacing with MARTe2: OPC UA
+
+6
+
+MARTe2 – OPC UA: Components
+Server – Client model
+•
+•
+
+OPC UA Server with Address Space builder => MARTe2 Interface
+OPC UA Clients for read/write data => MARTe2 DataSources
+
+Interfacing with MARTe2: OPC UA
+
+7
+
+MARTe2 – OPC UA: Server Interface
+OPCUAServer
++ServerTest = {
+Class = OPCUA::OPCUAServer
+Port = 4840
+CPUMask = 0x2
+AddressSpace = {
+TestVariable = {
+Type = uint32
+}
+TestObject = {
+Type = StructuredType
+}
+}
+}
+
+Interfacing with MARTe2: OPC UA
+
+8
+
+MARTe2 – OPC UA: DataSources
+OPCUADSInput
++OPCUAIn = {
+Class = OPCUADataSource::OPCUADSInput
+Address = "opc.tcp://localhost.localdomain:4840"
+ReadMode = "Read"
+Synchronise = "yes"
+Signals = {
+SensorPackage1 = {
+NamespaceIndex = 1
+Path = TestObject.Set1.SensorPackage1
+Type = SensorPackage
+NumberOfElements = 1
+}
+}
+}
+
+Interfacing with MARTe2: OPC UA
+
+9
+
+MARTe2 – OPC UA: DataSources
+OPCUADSOutput
++OPCUAOut = {
+Class = OPCUADataSource::OPCUADSOutput
+Address = "opc.tcp://localhost.localdomain:4840"
+Signals = {
+TestVariable = {
+NamespaceIndex = 1
+Path = TestVariable
+Type = uint32
+NumberOfElements = 1
+}
+}
+}
+
+Interfacing with MARTe2: OPC UA
+
+10
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

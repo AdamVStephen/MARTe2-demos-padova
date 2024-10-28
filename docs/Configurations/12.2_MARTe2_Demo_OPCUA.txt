@@ -1,0 +1,119 @@
+MARTe2 Users Meeting
+OPC Unified Architecture
+Luca Porzio
+May 2019
+
+1
+
+Objective
+• Integration with OPC UA
+• Server
+• Monitoring
+• Commands (i.e. Messages)
+• Structures
+• Non RT input data source
+
+MARTe2 Users Meeting - RealTime Applications
+
+2
+
+Example1 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader –s State1 -f ../Configurations/OPCUAServerAddressSpace.cfg
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-OPCUA-1.cfg -m
+StateMachine:START
+
+• Console #3
+cd ~/Projects/MARTe2-demos-padova/Other/OPCUAClientEx
+./UAWrite MARTE2-DEMO-APP:COMMAND 0 && sleep 1
+./UAWrite MARTE2-DEMO-APP:COMMAND 1 && sleep 2
+./UARead MARTE2-DEMO-APP:STATUS && sleep 4
+./UAWrite MARTE2-DEMO-APP:COMMAND 0 && sleep 1
+./UARead MARTE2-DEMO-APP:STATUS
+#Open the file /tmp/RTApp-OPCUA-1.csv and remove the last line
+Octave
+>graphics_toolkit('gnuplot');
+>load('/tmp/RTApp-OPCUA-1.csv');
+>plot(RTApp_OPCUA_1(:,1), RTApp_OPCUA_1(:,2), RTApp_OPCUA_1(:,1), RTApp_OPCUA_1(:,6))
+>legend('Reference0', 'Measurement0')
+
+MARTe2 Users Meeting - RealTime Applications
+
+3
+
+Example2 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader –s State1 -f ../Configurations/OPCUAServerAddressSpace.cfg
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-OPCUA-2.cfg -m
+StateMachine:START
+
+• Console #3
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader –s State1 -f ../Configurations/OPCUA-App-Monitor.cfg
+
+MARTe2 Users Meeting - RealTime Applications
+
+4
+
+Example2 – Learn more
+• Try to monitor more signals with OPCUADataSource
+• Use an OPCUADSInput and an OPCUADSOutput to
+connect a control output to a measurement input
+
+MARTe2 Users Meeting - RealTime Applications
+
+5
+
+Example3 – How to run
+• Console #1
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader –s State1 -f ../Configurations/OPCUAServerAddressSpace.cfg
+
+• Console #2
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-OPCUA-3.cfg -m
+StateMachine:START
+
+• Console #3
+cd ~/Projects/MARTe2-demos-padova/Other/OPCUAClientEx
+./UAWrite MARTE2-DEMO-APP:COMMAND 1
+Sleep 20
+./UAWrite MARTE2-DEMO-APP:COMMAND 0
+
+• Console #4
+cd ~/Projects/MARTe2-demos-padova/StartUp
+./Main.sh -l RealTimeLoader –s State2 -f ../Configurations/OPCUA-App-Monitor.cfg
+
+MARTe2 Users Meeting - RealTime Applications
+
+6
+
+Example3 – Learn more
+• In OPCUA-App-Monitor.cfg monitor the structure MARTe2Demo-App:Signals adding a new GAMDisplay and a new
+State
+• Create a configuration file that allows to proxy from/to
+EPICSv3 or EPICSv7 to/from OPCUA
+• Note the EPICSv3 db file and the OPCUA Address
+Space must be updated with any new variables that
+might be required
+
+MARTe2 Users Meeting - RealTime Applications
+
+7
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

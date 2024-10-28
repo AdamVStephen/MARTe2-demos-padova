@@ -1,0 +1,223 @@
+MARTe2 Users Meeting
+Introduction to the demonstrations
+Andre Neto
+May, 2019
+
+1
+
+Objective
+• Similar structure – only update the interfaces
+• Some examples are standalone and can be run on your
+computer
+• Other examples require hardware
+• PLC
+• PXIe
+• CRIO
+• STM32
+• RPI3
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+2
+
+The big picture
+File
+Data-Source
+
+MDS+
+Data-Source
+
+EPICS
+Data-source
+
+Error
+
+SDN
+Data-Source
+PLC SDN
+Data-Source
+
+C-RIO
+ADC
+
+SDN
+Data-Source
+
+Integral
+
+Ref
+
+State Space
+GAM
+Control
+
+Wavegen
+GAM
+PXI
+ADC
+
+REST
+(json-http)
+
+OPC-UA
+Data-source
+
+Meas
+
+1MHz->2kHz
+MDS+
+Data-Source
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+UDP
+STM32
+UDP
+Point2Point
+UDP
+PWM
+Point2Point
+UDP
+Data-Source
+STM32
+Point2Point
+Data-Source
+Point2Point
+PWM
+Data-Source
+Data-Source
+PXI
+DAC
+C-RIO
+DAC
+
+3
+
+Main GAMs
+• IOGAM
+• DataSource Input/Output operations
+• FilterDownsamplingGAM*
+• Filter and downsample
+• WaveformGAM
+• Reference generation
+• HistogramGAM
+• Statistics
+• SSMGAM
+• State space
+• ConversionGAM
+• Type casting
+
+*Private GAM for the demo (not official/no QA)
+No GAMs were hurt in the making of this demo
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+4
+
+SSM
+Delay
+
+1
+
+1/Ts
+
+Matrix A
+
++
+
+status
+
+-1/Ts
+
+input
+
+Matrix B
+
+Ref
+Meas
+
+0
+
+1
+
++
+
+Error
+
++
+
+Control
+
++
+
+Integral
+
+State Space
+status(t+1) =
+A * status(t) + B * input(t)
+output(t) =
+C * status(t) + D * input(t)
+
+-1
+
+Kp
+
+output
+
+Ki
+
+-Kp
+
+1
+
+0
+
+Matrix C
+
+0
+
+Matrix D
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+5
+
+Main DataSources
+• FileDataSource::FileWriter
+• Data archiving
+• MDSWriter
+• Data archiving
+• NI6259::NI6259ADC & NI6259::NI6259DAC
+• PXIe interface
+• LinuxTimer
+• Timing for debugging
+• LoggerDataSource
+• Display signal values in console
+• SDN::SDNSubscriber & SDN::SDNPublisher
+• Real-time network
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+6
+
+Main DataSources
+• EPICSCA::EPICSCAOutput
+• EPICSv3 output
+• EPICSPVADataSource::EPICSPVAOutput
+• EPICSv7 output
+• OPCUADataSource::OPCUADSInput & OPCUADataSource::OPCUADSOutput
+• OPCUA input/output
+• NI9157MxiDataSource
+• MXI CRIO interfacing
+
+MARTe2 Users Meeting - Introduction to the demonstrations
+
+7
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

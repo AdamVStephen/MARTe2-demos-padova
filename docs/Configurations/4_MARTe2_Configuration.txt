@@ -1,0 +1,342 @@
+MARTe2 Users Meeting
+Configuration
+Andre Neto, Filippo Sartori
+May, 2019
+
+1
+
+Object configuration
+Build fully data-driven applications: from object instantiation to object configuration.
+
+• Objects are configured using inputs from a (tree) database.
+• The access to this database is abstracted by the StructuredDataI interface.
+• Arbitrary user defined structure
+//List of variables
+Gain1 = -1.0
+Gain2 = -3.0
+Reference = {1, 2, 3}
+OR
+//Structure of variables
+Gains = {
+Low = {
+Gain1 = -1.0
+Gain2 = -3.0
+}
+…
+}
+…
+MARTe2 Users Meeting - Configuration
+
+2
+
+StructuredDataI
+Abstracts interface to the tree.
+
+• Offers methods to
+• Navigate the tree;
+• Create/Delete nodes;
+• Read/write values from/to the tree leafs
+...
+virtual bool Initialise(MARTe::StructuredDataI &data) {
+bool ok = Object::Initialise(data);
+if (ok) {
+ok = data.Read("Gain1", gain1);
+...
+...
+virtual bool Initialise(MARTe::StructuredDataI &data) {
+bool ok = Object::Initialise(data);
+if (ok) {
+ok = data.MoveRelative("Gains.Low");
+...
+MARTe2 Users Meeting - Configuration
+
+//List of variables
+Gain1 = -1.0
+Gain2 = -3.0
+Reference = {1, 2, 3}
+//Structure of variables
+Gains = {
+Low = {
+Gain1 = -1.0
+Gain2 = -3.0
+}
+3
+
+Parsers
+Transform input configuration language into a ConfigurationDatabase.
+
+Type
+
+Meaning
+
+StandardParser
+
+MARTe configuration language.
+
+XmlParser
+
+XML
+
+JsonParser
+
+JSON
+
+Stream
+(String,
+File,
+TCP, …)
+
+ParserI
+
+MARTe2 Users Meeting - Configuration
+
+CDB
+
+Objects
+
+4
+
+Configuration languages
+MARTe language
+Gains = {
+Low = {
+Gain1 = -1.0
+Gain2 = -3.0
+}
+High = {
+Gain1 = 7.0
+Gain2 = 9.0
+}
+}
+References = {
+Slow = {
+Waveform = {
+Times = {0 0.1 0.2 1}
+Values = {1 2 3 4}
+}
+}
+Fast = {
+Waveform = {
+Times = {0 0.1 0.2 1}
+Values = {1 2 3 4}
+}
+}
+}
+
+XML
+<Gains>
+<Low>
+<Gain1>-1.0</Gain1>
+<Gain2>-3.0</Gain2>
+</Low>
+<High>
+<Gain1>7.0</Gain1>
+<Gain2>9.0</Gain2>
+</High>
+</Gains>
+<References>
+<Slow>
+<Waveform>
+<Times>{0 0.1 0.2 1}</Times>
+<Values>{1 2 3 4}</Values>
+</Waveform>
+</Slow>
+<Fast>
+<Waveform>
+<Times>{0 0.1 0.2 1}</Times>
+<Values>{1 2 3 4}</Values>
+</Waveform>
+</Fast>
+</References>
+
+MARTe2 Users Meeting - Configuration
+
+JSON
+"Gains": {
+"Low": {
+"Gain1": -1.0,
+"Gain2": -3.0
+},
+"High": {
+"Gain1": 7.0,
+"Gain2": 9.0
+}
+},
+"References": {
+"Slow": {
+"Waveform": {
+"Times": [0, 0.1, 0.2, 1],
+"Values": [1, 2, 3, 4]
+}
+},
+"Fast": {
+"Waveform": {
+"Times": [0, 0.5, 1],
+"Values": [1, 0, 1]
+}
+}
+}
+5
+
+Wrappers
+Implement the StructuredDataI over existent databases (e.g. MDS+, EPICSv7)
+
+DB
+
+MDS+,
+EPICSPVA ,
+
+Objects
+
+…
+
+MARTe2 Users Meeting - Configuration
+
+6
+
+ReferenceContainer
+Core Class that is a navigable container of (references to) objects
+
+const char8 * const path = "State1.Thread1.PID1";
+ReferenceT<Controller> myController = Find(path);
+
+MARTe2 Users Meeting - Configuration
+
+7
+
+Full data driven apps
+Framework automatically instantiates a tree of objects based on a configuration stream (e.g. a file).
+
+• When the + character is found, the property Class=LIB::CLASS shall exist in the
+subtree.
+• LIB is the name of the shared library holding the compiled CLASS.
+• All instantiated Objects are automatically registered on a live Database
+• Any (reference to) object can be found in the ObjectRegistryDatabase
+
++A = {
+Class = AClass
+}
++B = {
+Class = AClass
++C = {
+Class = ALIB::CClass
+}
+}
+MARTe2 Users Meeting - Configuration
+
+ObjectRegistryDatabase
+
+8
+
+Exercises
+•
+•
+•
+•
+
+Run configuration in cdb, json and xml
+Use Initiliase to read from StructuredDataI different types
+Example with MDS+ interface
+Further reading and examples:
+• https://vcis.f4e.europa.eu/marte2docs/master/html/core/configuration/configuration.html
+
+MARTe2 Users Meeting - Configuration
+
+9
+
+Standard configuration file
+Objective: load a standard configuration file
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l Loader -f ../Configurations/Configuration-1.cfg
+
+• Modify Configurations/Configuration-1.cfg and change the Gains1.High.Gain1
+• Run the application again
+• Check that the value was updated
+Success: application executes and (all the implemented) gains are displayed as
+expected
+
+MARTe2 Users Meeting - Configuration
+
+10
+
+Initialise
+Objective: load parameters from any configuration stream
+• Modify Other/ControllerEx1/ControllerEx1.cpp
+• Modify the Initiliase method to read the Gain2 and the Gains2 parameters
+• Compile
+cd ~/Projects/MARTe2-demos-padova/
+export MARTe2_DIR=~/Projects/MARTe2-dev
+export MARTe2_Components_DIR=~/Projects/MARTe2-components/
+make -f Makefile.x86-linux
+
+• Run the application
+• Check that all the values are now shown in the console
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l Loader -f ../Configurations/Configuration-1.cfg
+
+Success: application executes and all the gains are displayed as expected
+
+MARTe2 Users Meeting - Configuration
+
+11
+
+XML configuration file
+Objective: load an XML configuration file
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l Loader -f ../Configurations/Configuration-1.xml -p xml
+
+• Modify Configurations/Configuration-1.xml and change the Gains1.High.Gain1
+• Run the application again
+• Check that the value was updated
+Success: application executes and the gains are displayed as expected
+
+MARTe2 Users Meeting - Configuration
+
+12
+
+JSON configuration file
+Objective: load a JSON configuration file
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l Loader -f ../Configurations/Configuration-1.json -p json
+
+• Modify Configurations/Configuration-1.xml and change the Gains1.High.Gain1
+• Run the application again
+• Check that the value was updated
+Success: application executes and the gains are displayed as expected
+
+MARTe2 Users Meeting - Configuration
+
+13
+
+MDSStructureDataI interface
+Objective: initialize using any component that implements MDSStructuredDataI
+• Browse the MDS+ configuration
+cd ~/Projects/MARTe2-demos-padova/
+export mdssdi_path=Trees
+jTraverser mdssdi -1
+
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/
+export mdssdi_path=Trees
+export LD_LIBRARY_PATH=.:$MARTe2_DIR/Build/x86-linux/Core/:Build/x86linux/Components/Other/ControllerEx1/
+Build/x86-linux/Components/Other/MDSStructuredDataIEx1/MDSStructuredDataIEx1.ex
+
+Success: application executes and the gains are displayed as in the pulse file
+Learn more:
+• Use jTraverser or tcl to modify the configuration values
+• https://vcis-jenkins.f4e.europa.eu/job/MARTe2-Components-docsmaster/doxygen/classMARTe_1_1MDSStructuredDataI.html
+MARTe2 Users Meeting - Configuration
+
+14
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

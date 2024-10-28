@@ -2,6 +2,28 @@
 
 Repository containing all the demos for MARTe2 Training Session
 
+This repository is a fork of the original work and adds supplementary information
+as well as some utility scripts to make running the examples smoother.
+
+
+## 2024 Updated Instructions for Alma8 (containerised)
+
+A fully prepared container is available at [Docker Hub](https://hub.docker.com/r/avstephen/m2padova-alma8)
+
+```
+docker pull avstephen/m2padova:alma8:maribor
+docker run -p 8084:8084 -it avstephen/m2padova-alma8:maribor bash
+```
+
+The Dockerfile from which this was constructed, along with various installation utility scripts
+is at [AdamVStephen/my-dockers/m2padova-alma8](https://github.com/AdamVStephen/my-dockers/m2padova-alma8)
+
+
+
+## Original 2019 Instructions Follow for Centos7 (now EOL)
+
+These instructions form a solid base for setting up a working environment.
+
 ## Setting up environment
 
 It is assumed that a clean CentOS 7 installation is being used (https://www.centos.org/download/).

@@ -1,0 +1,162 @@
+MARTe2 Users Meeting
+CRIO, RPI, STM32 demo
+Giuseppe Ferro, Andre Neto
+May, 2019
+
+1
+
+Objective
+• Demonstrate real-time interfaces between MARTe2, CRIO
+and BareMetal
+• Using SDN
+• STM32F746G-DISCO
+• STM32F746ZGT-NUCLEO
+• Configuration file:
+• https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demospadova/blob/develop/Configurations/RTApp-9157-1.cfg
+
+MARTe2 Users Meeting - CRIO, RPI, STM32 demo
+
+2
+
+CRIO – STM – RPI interface
+MDS+
+Data-Source
+
+OPC-UA
+Data-source
+
+EPICS
+Data-source
+
+Error
+
+SDN
+Data-Source
+
+REST
+(json-http)
+
+SDN
+Data-Source
+
+Integral
+
+Ref
+
+State Space
+GAM
+Control
+
+Wavegen
+GAM
+PXI
+ADC
+C-RIO
+ADC
+
+•
+
+Meas
+
+1Mhz->2kHz
+MDS+
+Data-Source
+
+UDP
+STM32
+UDP
+Point2Point
+UDP
+PWM
+Point2Point
+UDP
+Data-Source
+STM32
+Point2Point
+Data-Source
+Point2Point
+PWM
+Data-Source
+Data-Source
+PXI
+DAC
+C-RIO
+DAC
+
+Configuration file:
+https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova/blob/develop/Configurations/RTApp-9157-1.cfg
+MARTe2 Users Meeting - CRIO, RPI, STM32 demo
+
+3
+
+Workflow - CRIO
+• LabView
+• Implement FPGA design
+• Export variables using the LabView C-API generator tool
+• Expose these variables in the MARTe2 configuration file
+• No need to recompile
++NiDevice = {
+Class = NI9157Device
+NiRioDeviceName = RIO0
+NiRioGenFile = "NiFpga_Test.lvbitx"
+NiRioGenSignature = "5580A3D7E3CD37531FCD6557CFCD3824"
+Open = 1
+Configuration = {
+NiFpga_TestGTD0001_ControlU8_options = 2
+NiFpga_TestGTD0001_ControlBool_stop = 0
+NiFpga_TestGTD0001_ControlBool_use_counter = 1
+NiFpga_TestGTD0001_ControlU16_maxV = 5
+NiFpga_TestGTD0001_ControlU16_DacResolution = 16383
+}
+MARTe2 Users Meeting - CRIO, RPI, STM32 demo
+
+4
+
+CRIO interfaces
+
+• MXI
+• Asynchronous read/write
+• MARTe2 interface for configuration
+• MARTe2 DataSource monitoring/update
+• FIFO streaming
+• MARTe2 real-time I/O DataSource
+
+MARTe2 Users Meeting - CRIO, RPI, STM32 demo
+
+5
+
+Workflow – STM32
+• STM32CubeMX
+• Configure hardware
+• Generate and compile BSP
+• Cross-compile MARTe2
+• Link MARTe2 & BSP
+• Configuration file
+• Compiled as string or
+• Loaded from serial interface
+• Generate and load firmware
+https://www.st.com/en/development-tools/stm32cubemx.html
+MARTe2 Users Meeting - CRIO, RPI, STM32 demo
+
+6
+
+Workflow – RPI3 BM
+• Circle bare metal library
+• Cross-compile MARTe2
+• Link MARTe2 & Circle
+• Generate and load firmware
+• Configuration file compiled as string
+
+https://github.com/rsta2/circle
+MARTe2 Users Meeting - CRIO, RPI, STM32 demo
+
+7
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

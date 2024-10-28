@@ -1,0 +1,113 @@
+MARTe2 Users Meeting
+A. Neto, F. Sartori and G. Manduchi
+May 2019
+
+1
+
+Objectives of the meeting
+• Demonstrate the MARTe2 framework features
+• A framework for integration!
+• Highlight the main differences between the MARTe1 and
+MARTe2 frameworks
+• Find synergies with-in the community for further developments
+and contributions
+
+MARTe2 Users Meeting
+
+2
+
+Organisation
+• Presentations
+• Main ideas and justification for main technical decisions
+• Top-down
+• Easier to understand concepts …
+• … but please be patient - some concepts will have to be
+assumed until later presentations
+• Hands-on
+• Exercises and ideas that allow to play with what was shown
+during the presentations
+• Limited time
+• Followed by group QA
+• Hardware demos
+• Demonstrations that require hardware
+MARTe2 Users Meeting
+
+3
+
+Hands-on
+• Divided in groups supported by a mentor
+
+Neto
+• Baldris
+• Cindric
+• Gameiro
+• Knap
+
+Sartori
+• Ferron
+• Moro
+• Varas
+• Rigoni
+
+MARTe2 Users Meeting
+
+Manduchi
+• Stillerman
+• Stuart
+• Valhondo
+• Zanon
+
+Ferro
+• Gospodarczyk
+• Havránek
+• Marti R.
+• Piron
+
+Porzio
+• Nobili
+• Ruiz
+• Taliercio
+• Vitale
+
+Boncagni
+• Cruz
+• Giacchini
+• Leone
+• Meyer
+
+4
+
+Resources
+•
+•
+•
+•
+•
+•
+•
+
+MARTe2 User Documentation
+MARTe2 core - source
+MARTe2 components - source (branch OPCUA)
+MARTe2 demo Padova - source
+MARTe2 core - doxygen
+MARTe2 components - doxygen
+Eclipse configuration (not mandatory)
+
+• Make sure that you either use the provided Docker or that you
+have a linux VM configured as described here.
+• In particular make sure that you setup all the environment
+variables correctly and that these are available on all consoles (e.g.
+place them in a file named /etc/profile.d/marte2-exports.sh).
+MARTe2 Users Meeting
+
+5
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+

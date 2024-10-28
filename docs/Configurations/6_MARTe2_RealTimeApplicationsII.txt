@@ -1,0 +1,910 @@
+MARTe2 Users Meeting
+RealTime Applications II
+Andre Neto, Filippo Sartori
+May, 2019
+
+1
+
+Signal properties
+Type
+
+The signal type as any of the supported Types or a structure type.
+
+DataSource
+
+The name of the DataSource from where the signal will read/written
+from/to.
+
+Frequency
+
+Only meaningful for input signals. The frequency at which the signal
+is expected to be produced (at most one signal per real-time thread)
+may have this property set.
+
+Trigger
+
+Only meaningful for output signals. Trigger the DataSource when
+this signal is written.
+
+NumberOfElements
+
+The number of elements (1 if the signal is a scalar).
+
+NumberOfDimensions
+
+The number of dimensions (0 if scalar, 1 if vector, 2 if matrix).
+
+MARTe2 Users Meeting - RealTime Applications II
+
+2
+
+Signal properties
+
+Samples
+
+The number of samples to read from a DataSource.
+This number defines the number of samples that the DataSource shall
+acquire for each control cycle.
+Note that each sample may contain an array.
+
+Ranges
+
+In the case of a vector read/write only a subset. The format is a matrix,
+indexed to zero, of the ranges that are to be read (e.g. {{0, 1}, {3, 5}} would
+read elements 0, 1, 3, 4 and 5 of the array).
+
+Alias
+
+The name of the signal in the DataSource (which can be different from the
+name of the signal in the GAM).
+
+Default
+
+The default value to be used in the first control cycle (if needed, i.e. if it
+depends from a value of the previous cycle).
+
+MARTe2 Users Meeting - RealTime Applications II
+
+3
+
+Signal properties
++GAMDisplay = {
+Class = IOGAM
+InputSignals = {
+Counter = {
+DataSource = DDB1
+NumberOfElements = 1
+NumberOfDimensions = 0
+Type = uint32
+}
+GainCounter = {
+DataSource = DDB1
+Type = uint32
+}
+State1_Thread1_CycleTime = {
+Alias = State1.Thread1_CycleTime
+DataSource = Timings
+Type = uint32
+}
+Signal3 = {
+DataSource = DDB1
+Type = uint32
+Ranges = {{0,0}, {2, 2}}
+NumberOfElements = 3
+NumberOfDimensions = 1
+}
+MARTe2 Users Meeting - RealTime Applications II
+
++Timer = {
+Class = LinuxTimer
+SleepNature = "Default"
+Signals = {
+Counter = {
+Type = uint32
+}
+Time = {
+Type = uint32
+}
+}
+}
+
+4
+
+Registered types as signals
+...
+InputSignals = {
+Structured signals
+Signal1 = {
+GAMs can also use structured types as signals.
+u1 = {
+DataSource = DDB1
+Type = uint32
+struct ModelGAMExampleStructInner1 {
+}
+MARTe::float32 f1;
+s1 = {
+MARTe::float32 f2;
+f1 = {
+MARTe::float32 f3[6];
+DataSource = DDB1
+};
+Type = float32
+struct ModelGAMExampleStructSignal {
+}
+MARTe::uint32 u1;
+f2 = {
+ModelGAMExampleStructInner1 s1;
+DataSource = DDB1
+ModelGAMExampleStructInner1 s2;
+Type = float32
+};
+}
+f3 = {
+DataSource = DDB1
+Type = float32
+...
+NumberOfDimensions = 1
+InputSignals = {
+NumberOfElements = 6
+Signal1 = {
+}
+DataSource = DDB1
+}
+Type = ModelGAMExampleStructSignal
+s2 = {
+}
+Note
+...
+}
+Structure will be automatically expanded into the equivalent signal configuration structure
+MARTe2 Users Meeting - RealTime Applications II
+
+5
+
+Registered types
+...
+InputSignals = {
+Signal1 = {
+DataSource = DDB1
+Type = ModelGAMExampleStructSignal
+Defaults = {
+Signal1.s1.f1 = 2
+Signal1.s1.f2 = 3
+Signal1.s1.f3 = {1, 2, 3, 4, 5, 6}
+Signal1.s2.f1 = -2
+Signal1.s2.f2 = -3
+Signal1.s2.f3 = {-1, -2, -3, -4, -5, -6}
+}
+MemberAliases = {
+//Rename of a structured member
+Signal1.s2.f2 = Signal1.s2.g2
+}
+}
+...
+
+Property
+
+Meaning
+
+MemberAliases
+
+The name of the structured
+member signal in the DataSource
+(which can be different from the
+name of the signal in the GAM).
+
+Defaults
+
+The default value for a given
+member of the structure.
+
+MARTe2 Users Meeting - RealTime Applications II
+
+6
+
+Registering types
+Registers a structure as defined by a StructuredDataI.
+
+• Each node is a structure member and shall have the field Type defined.
+• The name of the Object is the name of the structure to register.
++MyTypes = {
+Class = ReferenceContainer
++MyStructEx1 = { //name of the structured type to register.
+Class = IntrospectionStructure
+Field1 = {
+Type = uint32
+NumberOfElements = 1
+}
+Field2 = {
+Type = float32
+NumberOfElements = {3, 2} //3x2 matrix
+}
+}
++MyStructEx2 = { //name of the structured type to register.
+Class = IntrospectionStructure
+Field1 = {
+Type = MyStructEx1
+NumberOfElements = {3, 2, 1} //3x1x2 matrix of MyStructEx1
+}
+…
+MARTe2 Users Meeting - RealTime Applications II
+
+7
+
+More rules!
+•
+•
+•
+•
+•
+•
+•
+
+The nodes Functions, Data, States and Scheduler shall exist;
+At least one GAM shall be declared;
+At least one DataSource shall be declared;
+Exactly one TimingDataSource shall be declared;
+At least one state shall be declared;
+For each state, at least one thread shall be declared;
+For each thread, at least one function (GAM) shall be declared;
+
+MARTe2 Users Meeting - RealTime Applications II
+
+8
+
+Signal rules
+• For every thread
+• The input port of each GAM or DataSource shall be
+connected to exactly one signal
+• From another GAM or from a DataSource
+• The output port of a given GAM or DataSource may be
+connected to zero or more signals (in another GAM or
+DataSource);
+• At most one signal shall define the property Frequency (i.e.
+at most one synchronisation point per thread).
+
+MARTe2 Users Meeting - RealTime Applications II
+
+9
+
+Signal rules
+• The properties of each signal shall be fully consistent between
+the signal producer and the signal consumer
+• Type
+• Number of elements
+• Number of dimensions
+• If the number of elements is not defined, one is assumed;
+• If the number of dimensions is not defined, zero is assumed
+(scalar signal);
+• If no Default value is specified, zero is assumed.
+• The signal type shall be defined either by the signal producer or
+by one of the signal consumers:
+
+MARTe2 Users Meeting - RealTime Applications II
+
+10
+
+Signal rules
+Zero-hold
+•
+
+If a GAM requires a signal that is produced by a subsequent GAM, an implicit zero-hold is
+introduced in the cycle and the signal is initialised to its Default value.
+
+MARTe2 Users Meeting - RealTime Applications II
+
+11
+
+Dynamic type discovery
+
+MARTe2 Users Meeting - RealTime Applications II
+
+12
+
+Type must be defined at least once
+
+MARTe2 Users Meeting - RealTime Applications II
+
+13
+
+Types must be consistent
+
+MARTe2 Users Meeting - RealTime Applications II
+
+14
+
+Ranges
+Ranges
+Allow to access elements of an array, e.g.: Ranges = {{0,0}, {2, 2}}
+
+MARTe2 Users Meeting - RealTime Applications II
+
+15
+
+RealTimeApplication Initialisation
+• Part 1
+• Calls Initialise on all components
+• Components expected to read properties from configuration
+source
+• GAMs/DataSources should not make any assumptions on
+inputs/outputs
+• Part 2
+• All rules validated
+• All signals resolved (who reads/write from/where)
+• Calls Setup on the GAMs
+• Calls SetConfigurationDatabase on DataSources
+• GAMs and DataSources should verify if inputs/outputs are
+compliant with requirements
+MARTe2 Users Meeting - RealTime Applications II
+
+16
+
+Synchronising multiple threads
+RealTimeThreadSynchronisation
+Performed using the RealTimeThreadSynchronisation DataSource component.
+RealTimeThreadAsyncBridge component also allows to exchange data between threads without an explicit synchronisation point.
+This means that the consumer threads will use the latest available data.
+
+MARTe2 Users Meeting - RealTime Applications II
+
+17
+
+Synchronising multiple threads
++GAMT1TSynchOut = {
+Class = IOGAM
+InputSignals = {
+GainCounter1Thread1 = {
+DataSource = DDB1
+Type = uint32
+}
+GainCounter2Thread1 = {
+DataSource = DDB1
+Type = uint32
+}
+}
+OutputSignals = {
+GainCounter1Thread1 = {
+DataSource = RTThreadSynch
+Type = uint32
+}
+GainCounter2Thread1 = {
+DataSource = RTThreadSynch
+Type = uint32
+}
+}
+}
+
++GAMT1T2Interface = {
+Class = IOGAM
+InputSignals = {
+GainCounter1Thread1 = {
+DataSource = RTThreadSynch
+Type = uint32
+Samples = 2 //Run at half the frequency of thread 1
+}
+GainCounter2Thread1 = {
+DataSource = RTThreadSynch
+Type = uint32
+Samples = 2 //Run at half the frequency of thread 1
+}
+}
+OutputSignals = {
+GainCounter1Thread2 = {
+DataSource = DDB1
+Type = uint32
+Samples = 1
+NumberOfDimensions = 1
+NumberOfElements = 2 //2 elements for each cycle (as it waits for 2 samples)
+}
+GainCounter3Thread2 = {
+NumberOfDimensions = 1
+NumberOfElements = 2 //2 elements for each cycle (as it waits for 2 samples)
+}
+
+MARTe2 Users Meeting - RealTime Applications II
+
+18
+
+StateMachine
+• Key component which is used in many MARTe applications to
+synchronise the application state against the external
+environment
+• Each state contains one, or more, StateMachineEvent elements.
+• The StateMachine can be in one (and only one) state at a given
+time.
+• Upon receiving of a Message:
+• StateMachine verifies if the Message function is equal to the
+name of any of the declared StateMachineEvent elements for
+the current StateMachine state.
+• Sends a configurable set of Messages before changing state
+Note
+If a state change requests arrives while the state is being changed, this request will be queued and served once the
+previous state transition is completed.
+MARTe2 Users Meeting - RealTime Applications II
+
+19
+
+StateMachine
++StateMachineExample1 = {
+Class = StateMachine
++STATE1 = {
+Class = ReferenceContainer
++GOTOSTATE2 = {
+Class = StateMachineEvent
+NextState = STATE2
+NextStateError = STATE1
+Timeout = 0
++DoSomethingOnRec1 = {
+Class = Message
+Destination = Receiver1
+Mode = ExpectsReply
+Function = Function1
++Parameters = {
+Class = ConfigurationDatabase
+param1 = 2
+param2 = 3.14
+}
+}
++DoSomethingElseOnRec1 = {
+Class = Message
+Destination = Receiver1
+Mode = ExpectsReply
+Function = Function0
+}
+}
+MARTe2 Users Meeting - RealTime Applications II
+
+20
+
+RealTimeApplication state change
+• State can be changed by calling the methods PrepareNextState,
+StopCurrentStateExecution and StartNextStateExecution on the
+RealTimeApplication
+• Methods are registered as RPC functions and thus can be
+triggered using the messaging mechanisms
+• Typically the interface to the state changing mechanism is
+provided by the StateMachine
+
+MARTe2 Users Meeting - RealTime Applications II
+
+21
+
+RealTimeApplication state change
++StateMachine = {
+Class = StateMachine
++STATE1 = {
+Class = ReferenceContainer
++GOTOSTATE2 = {
+Class = StateMachineEvent
+NextState = "STATE2"
+NextStateError = "ERROR"
++PrepareChangeToState2Msg = {
+Class = Message
+Destination = TestApp
+Mode = ExpectsReply
+Function = PrepareNextState
++Parameters = {
+Class = ConfigurationDatabase
+param1 = State2
+}
+}
++StopCurrentStateExecutionMsg = {
+Class = Message
+Destination = TestApp
+Function = StopCurrentStateExecution
+Mode = ExpectsReply
+}
++StartNextStateExecutionMsg = {
+Class = Message
+Destination = TestApp
+Function = StartNextStateExecution
+Mode = ExpectsReply
+}
+...
+
+MARTe2 Users Meeting - RealTime Applications II
+
+22
+
+time elapsed from the beginning of the cycle until this GAM_NAME has finished its execution
+
+Measuring performance
+• Each RealTimeApplication will automatically add to the TimingDataSource
+the following signals:
+• STATE_NAME.THREAD_NAME_CycleTime
+• STATE_NAME = name of the state where the thread is running
+• THREAD_NAME = name of the RealTimeThread object instance
+• GAM_NAME_ReadTime
+• Time elapsed from the beginning of the cycle until all the input
+brokers for this GAM_NAME have been executed
+• GAM_NAME_WriteTime
+• Time elapsed from the beginning of the cycle until all the output
+brokers for this GAM_NAME have been execute
+• GAM_NAME_ExecTim
+• Time elapsed from the beginning of the cycle until this GAM_NAME
+has finished its execution
+
+MARTe2 Users Meeting - RealTime Applications II
+
+23
+
+GAM API useful methods
+virtual bool
+
+Setup ()=0
+
+uint32
+
+GetNumberOfInputSignals () const
+
+uint32
+
+GetNumberOfOutputSignals () const
+
+bool
+GetSignalName (const SignalDirection direction, const uint32 signalIdx, StreamString
+&signalName)
+bool
+GetSignalIndex (const SignalDirection direction, uint32 &signalIdx, const char8 *const
+signalName)
+TypeDescriptor
+
+GetSignalType (const SignalDirection direction, const uint32 signalIdx)
+
+bool
+GetSignalNumberOfElements (const SignalDirection direction, const uint32 signalIdx,
+uint32 &numberOfElements)
+https://vcis-jenkins.f4e.europa.eu/job/MARTe2-docsmaster/doxygen/classMARTe_1_1GAM.html
+MARTe2 Users Meeting - RealTime Applications II
+
+24
+
+DataSource API useful methods
+virtual bool
+
+Synchronise ()=0
+
+virtual bool
+
+AllocateMemory ()=0
+
+virtual bool GetSignalMemoryBuffer (const uint32 signalIdx, const
+uint32 bufferIdx, void *&signalAddress)=0
+virtual const char8 * GetBrokerName (StructuredDataI &data, const
+SignalDirection direction)=0
+virtual bool PrepareNextState (const char8 *const
+currentStateName, const char8 *const nextStateName)=0
+https://vcis-jenkins.f4e.europa.eu/job/MARTe2-docsmaster/doxygen/classMARTe_1_1DataSourceI.html
+MARTe2 Users Meeting - RealTime Applications II
+
+25
+
+DataSource API useful methods
+uint32 GetNumberOfSignals () const
+bool GetSignalIndex (uint32 &signalIdx, const char8 *const
+signalName)
+bool GetSignalName (const uint32 signalIdx, StreamString
+&signalName)
+TypeDescriptor
+
+GetSignalType (const uint32 signalIdx)
+
+bool GetSignalNumberOfElements (const uint32 signalIdx, uint32
+&numberOfElements)
+https://vcis-jenkins.f4e.europa.eu/job/MARTe2-docsmaster/doxygen/classMARTe_1_1DataSourceI.html
+MARTe2 Users Meeting - RealTime Applications II
+
+26
+
+List of existent components
+https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components
+
+MARTe2 Users Meeting - RealTime Applications II
+
+27
+
+List of existent components
+https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components
+
+MARTe2 Users Meeting - RealTime Applications II
+
+28
+
+List of existent components
+https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components
+
+MARTe2 Users Meeting - RealTime Applications II
+
+29
+
+List of existent components
+https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components
+
+MARTe2 Users Meeting - RealTime Applications II
+
+30
+
+List of brokers
+
+MARTe2 Users Meeting - RealTime Applications II
+
+31
+
+Exercise
+•
+•
+•
+•
+•
+•
+•
+•
+
+Correct bugs in configuration for != types of rules
+Alias and Ranges
+GAM with parameters
+GAM with structured signals
+DataSource
+Synchronised RTThreads
+Async RTThreads
+StateMachine
+
+MARTe2 Users Meeting - RealTime Applications II
+
+32
+
+Find the bug 1
+Objective: verify and fix rules in a MARTe configuration file
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-1.cfg -s State1
+
+• Modify Configurations/RTApp-2-1.cfg
+• Fix the errors
+• Run the application again
+Success: application executes and console is regularly updated
+
+MARTe2 Users Meeting - RealTime Applications
+
+33
+
+Find the bug 2
+Objective: verify and fix rules in a MARTe configuration file
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-2.cfg -s State1
+
+• Modify Configurations/RTApp-2-2.cfg
+• Fix the errors
+• Run the application again
+Success: application executes and console is regularly updated
+
+MARTe2 Users Meeting - RealTime Applications
+
+34
+
+Alias and Ranges
+Objective: learn how to use the Alias and Range parameters
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-3.cfg -s State1
+
+• Note:
+• 10 elements are print into the output
+• The GAMDisplay uses the Alias to access the signal in the DDB1
+• Modify Configurations/RTApp-2-3.cfg
+• Use the Ranges parameter in GAMDisplay to only output the first and the last
+element of the array
+• Use the Alias parameter to rename the signal Output (in the GAMDisplay) to
+OutputReference
+• Run the application again
+Success: application executes and console is regularly updated only with the first and
+last element renamed as OutputReference
+Learn more:
+• Did you notice that no Signals were set in the FileReader DataSource?
+https://vcis-jenkins.f4e.europa.eu/job/MARTe2-Components-docsmaster/doxygen/classMARTe_1_1FileReader.html#details
+MARTe2 Users Meeting - RealTime Applications
+
+35
+
+Modify existent GAM 2
+Objective: modify existent GAM and read parameters
+• Modify GAMs/FixedGAMExample1/FixedGAMExample1.cpp
+• Read the Offset parameter from the configuration and add it to the input signal
+• Compile
+cd ~/Projects/MARTe2-demos-padova/
+export MARTe2_DIR=~/Projects/MARTe2-dev
+export MARTe2_Components_DIR=~/Projects/MARTe2-components/
+make -f Makefile.x86-linux
+
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-4.cfg -s State1
+
+Success: application executes and console is regularly updated with value multiplied by the
+gain + the configured Offset
+
+MARTe2 Users Meeting - RealTime Applications
+
+36
+
+Modify existent GAM 3
+Objective: modify existent GAM and adapt to different I/O
+• Modify GAMs/VariableGAMExample1/VariableGAMExample1.cpp
+• Implement the Execute method so that it multiplies each output signal by the
+corresponding gain
+• cdCompile
+~/Projects/MARTe2-demos-padova/
+export MARTe2_DIR=~/Projects/MARTe2-dev
+export MARTe2_Components_DIR=~/Projects/MARTe2-components/
+make -f Makefile.x86-linux
+
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-5.cfg -s State1
+
+Success: application executes and console is regularly updated with all the output values
+multiplied by the corresponding gains
+
+MARTe2 Users Meeting - RealTime Applications
+
+37
+
+Structured signal
+Objective: use structured types in a configuration file
+• Modify Configurations/RTApp-2-6.cfg
+• Add the Model signal as a structure to the list of signal outputs by the
+GAMDisplay
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-6.cfg -s State1
+
+Success: application executes and console is regularly updated with the value of the structure
+
+MARTe2 Users Meeting - RealTime Applications
+
+38
+
+Modify existent DataSource
+Objective: modify existent DataSource
+• Modify DataSources/SimpleUDPSender/SimpleUDPSender.cpp
+• Implement the GetBrokerName and the Synchronise method
+• Hint you need to call Write and Flush on the UDPSocket
+• Compile
+cd ~/Projects/MARTe2-demos-padova/
+export MARTe2_DIR=~/Projects/MARTe2-dev
+export MARTe2_Components_DIR=~/Projects/MARTe2-components/
+make -f Makefile.x86-linux
+
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-7.cfg -s State1
+
+• On another console type
+nc -luv 127.0.0.1 4444 | hexdump -v -e '/4 "%d\n"'
+
+Success: application executes and console is regularly updated with timer value, on the
+second console the time is also correctly listed
+MARTe2 Users Meeting - RealTime Applications
+
+39
+
+Modify existent DataSource 2
+Objective: send structured data using DataSource without recompiling
+• Modify Configurations/RTApp-2-7.cfg
+• Add the Model Signal to the UDPGAM
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-7.cfg -s State1
+
+• On another console type
+nc -luv 127.0.0.1 4444 | hexdump -v -e '3/4 "%d
+" /4 " %.4f
+" /8 " %d\n"'
+
+" /1 "
+
+%d
+
+" /8 " %.4f
+
+Success: application executes and console is regularly updated with timer value, on the
+second console the packet with the structure is correctly listed
+MARTe2 Users Meeting - RealTime Applications
+
+40
+
+Synchronising RealTime Threads
+Objective: exchange data between threads (synchronously)
+• Modify Configurations/RTApp-2-8.cfg
+• Change GAMT1T2Interface and GAMDisplayThread2 so that it runs at ¼ of the
+frequency
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-8.cfg -s State1
+
+Success: application executes and console is regularly updated by both threads at the
+relevant frequencies
+Learn more:
+• Use the Ranges to downsample the data and only show 1 out of 4 points in the
+GAMDisplayThread2
+• Add a third thread at an 1/8 of the frequency
+MARTe2 Users Meeting - RealTime Applications
+
+41
+
+Asynchronous data between
+RealTime Threads
+Objective: exchange data between threads (asynchronously – get latest)
+• Modify Configurations/RTApp-2-9.cfg
+• Change GAMTimerT2 so that it runs at ¼ of the frequency
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-9.cfg -s State1
+
+Success: application executes and console is regularly updated by both threads at the
+relevant frequencies
+
+MARTe2 Users Meeting - RealTime Applications
+
+42
+
+StateMachine
+Objective: use the StateMachine to centralize state management
+• Modify Configurations/RTApp-2-10.cfg
+• Change +START so that the application goes directly to STATE3 upon start
+• Note that param1 = State1 must also be changed!
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-10.cfg -m StateMachine:START
+
+Success: application executes and console is regularly updated with slowly changing sine
+wave
+Learn more:
+• Modify the StateMachine so that in STATE2 it can also go back to STATE1
+
+MARTe2 Users Meeting - RealTime Applications
+
+43
+
+StateMachine II
+Objective: drive the state machine from an external component
+• Run the application
+cd ~/Projects/MARTe2-demos-padova/Startup/
+./Main.sh -l RealTimeLoader -f ../Configurations/RTApp-2-11.cfg -m StateMachine:START
+
+• On another console type
+echo -e "Destination=StateMachine\nFunction=GOTOSTATE2" | nc 127.0.0.1 24680
+
+• Check that the state has changed
+• On another console type
+echo -e "Destination=StateMachine\nFunction=GOTOSTATE3" | nc 127.0.0.1 24680
+
+• Check that the state has changed
+Success: application executes and state is updated successfully when running nc
+Learn more:
+• Modify the StateMachine so that in STATE2 it can also go back to STATE1
+MARTe2 Users Meeting - RealTime Applications
+
+44
+
+Further examples
+• Measure the performance of all the components
+and output to the console
+• Measure the performance use the HistogramGAM
+to collect statistics
+• Use the WaveformGAM the SSMGAM and the
+PIDGAM to implement a control loop
+
+MARTe2 Users Meeting - RealTime Applications
+
+45
+
+Follow us on:
+www.f4e.europa.eu
+www.twitter.com/fusionforenergy
+www.youtube.com/fusionforenergy
+www.linkedin.com/company/fusion-for-energy
+www.flickr.com/photos/fusionforenergy
+
+
